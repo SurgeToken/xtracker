@@ -1,6 +1,6 @@
 import express from 'express'
 import { questDbClient } from '../app.js'
-import {Contracts, getContractByAddress} from "../contracts.js";
+import {getContractByAddress} from "../contracts.js";
 
 const router = express.Router()
 
@@ -21,63 +21,29 @@ router.get('/:contractAddress', async (req, res) => {
     res.json({ columns: data.columns, dataset: data.dataset, count: data.count })
 })
 
-router.get('/surge', async (req, res) => {
-    const interval = parseInterval(req.query.interval)
-    const query = `SELECT avg(price) AS price, timestamp FROM ${Contracts.SurgeBnb.address} SAMPLE BY ${interval} ALIGN TO CALENDAR`
+router.get('/:contractAddress/change', async (req, res) => {
+    const contract = getContractByAddress(req.params.contractAddress)
 
-    let data = await questDbClient.query(query)
-    data.dataset = data.dataset.map(point => [point[0], Math.floor(new Date(point[1]).getTime() / 1000)])
+    if (!contract) {
+        res.status(404).json({ error: 'CONTRACT_NOT_FOUND', message: 'Could not find Surge contract with the specified address' })
+        return
+    }
 
-    res.json({ columns: data.columns, dataset: data.dataset, count: data.count })
-})
-
-router.get('/surge/change', async (req, res) => {
-    const query = `SELECT (cast(last(price) AS DOUBLE) + -cast(first(price) AS DOUBLE)) AS change FROM ${Contracts.SurgeBnb.address} WHERE timestamp >= dateadd('d', -1, now())`
+    const query = `SELECT (cast(last(price) AS DOUBLE) + -cast(first(price) AS DOUBLE)) AS change FROM ${contract.address} WHERE timestamp >= dateadd('d', -1, now())`
 
     const data = await questDbClient.query(query)
     res.json({ change: data.dataset[0][0] })
 })
 
-router.get('/surge/changePercentage', async (req, res) => {
-    const query = `SELECT ((cast(last(price) AS DOUBLE) - cast(first(price) AS DOUBLE)) / cast(first(price) AS DOUBLE)) AS change FROM ${Contracts.SurgeBnb.address} WHERE timestamp >= dateadd('d', -1, now())`
+router.get('/:contractAddress/changePercentage', async (req, res) => {
+    const contract = getContractByAddress(req.params.contractAddress)
 
-    const data = await questDbClient.query(query)
-    res.json({ change: data.dataset[0][0] })
-})
+    if (!contract) {
+        res.status(404).json({ error: 'CONTRACT_NOT_FOUND', message: 'Could not find Surge contract with the specified address' })
+        return
+    }
 
-router.get('/surgeusd', async (req, res) => {
-    const interval = parseInterval(req.query.interval)
-    const query = `SELECT avg(price) AS price, timestamp FROM ${Contracts.SurgeUsd.address} SAMPLE BY ${interval} ALIGN TO CALENDAR`
-
-    let data = await questDbClient.query(query)
-    data.dataset = data.dataset.map(point => [point[0], Math.floor(new Date(point[1]).getTime() / 1000)])
-
-    res.json({ columns: data.columns, dataset: data.dataset, count: data.count })
-})
-
-router.get('/surgeusd/change', async (req, res) => {
-    const query = `SELECT (cast(last(price) AS DOUBLE) + -cast(first(price) AS DOUBLE)) AS change FROM ${Contracts.SurgeUsd.address} WHERE timestamp >= dateadd('d', -1, now())`
-
-    const data = await questDbClient.query(query)
-    res.json({ change: data.dataset[0][0] })
-})
-
-router.get('/surgeusd/changePercentage', async (req, res) => {
-    const query = `SELECT ((cast(last(price) AS DOUBLE) - cast(first(price) AS DOUBLE)) / cast(first(price) AS DOUBLE)) AS change FROM ${Contracts.SurgeUsd.address} WHERE timestamp >= dateadd('d', -1, now())`
-
-    const data = await questDbClient.query(query)
-    res.json({ change: data.dataset[0][0] })
-})
-
-router.get('/surgeeth/change', async (req, res) => {
-    const query = `SELECT (cast(last(price) AS DOUBLE) + -cast(first(price) AS DOUBLE)) AS change FROM ${Contracts.SurgeEth.address} WHERE timestamp >= dateadd('d', -1, now())`
-
-    const data = await questDbClient.query(query)
-    res.json({ change: data.dataset[0][0] })
-})
-
-router.get('/surgeeth/changePercentage', async (req, res) => {
-    const query = `SELECT ((cast(last(price) AS DOUBLE) - cast(first(price) AS DOUBLE)) / cast(first(price) AS DOUBLE)) AS change FROM ${Contracts.SurgeEth.address} WHERE timestamp >= dateadd('d', -1, now())`
+    const query = `SELECT ((cast(last(price) AS DOUBLE) - cast(first(price) AS DOUBLE)) / cast(first(price) AS DOUBLE)) AS change FROM ${contract.address} WHERE timestamp >= dateadd('d', -1, now())`
 
     const data = await questDbClient.query(query)
     res.json({ change: data.dataset[0][0] })
