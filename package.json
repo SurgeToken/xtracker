@@ -1,0 +1,22 @@
+{
+  "name": "xtracker",
+  "version": "1.0.0",
+  "description": "Tracking X Tokens like Dog the bounty hunter",
+  "main": "src/app.js",
+  "type": "module",
+  "scripts": {
+    "start": "node --experimental-json-modules src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "author": "SurgeToken",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "node-fetch": "^2.6.1",
+    "web3": "^1.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
