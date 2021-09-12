@@ -2,9 +2,12 @@ import express from 'express'
 import cors from 'cors'
 
 import PriceRecorder from './PriceRecorder.js'
-import router from './routes'
+import router from './routes/index.js'
 import QuestDbClient from './QuestDbClient.js'
-import { getSurgeEthPriceInBnb, getSurgePriceInBnb, getSurgeUsdPriceInBnb, startBnbPriceUpdateLoop } from './price.js'
+import {
+    getPriceInBnb,
+    startBnbPriceUpdateLoop
+} from './price.js'
 import {Contracts} from "./contracts.js";
 
 // connect to QuestDB
@@ -23,14 +26,17 @@ questDbClient.connect()
 
 // Start updating the BNB price and then start recording prices
 startBnbPriceUpdateLoop().then(() => {
-    const surgePriceRecorder = new PriceRecorder(questDbClient, Contracts.SurgeBnb.address, getSurgePriceInBnb)
+    const surgePriceRecorder = new PriceRecorder(questDbClient, Contracts.SurgeBnb.address, () => getPriceInBnb(Contracts.SurgeBnb.address))
     surgePriceRecorder.startRecording()
 
-    const surgeUsdPriceRecorder = new PriceRecorder(questDbClient, Contracts.SurgeUsd.address, getSurgeUsdPriceInBnb)
+    const surgeUsdPriceRecorder = new PriceRecorder(questDbClient, Contracts.SurgeUsd.address, () => getPriceInBnb(Contracts.SurgeUsd.address))
     surgeUsdPriceRecorder.startRecording()
 
-    const surgeEthPriceRecorder = new PriceRecorder(questDbClient, Contracts.SurgeEth.address, getSurgeEthPriceInBnb)
+    const surgeEthPriceRecorder = new PriceRecorder(questDbClient, Contracts.SurgeEth.address, () => getPriceInBnb(Contracts.SurgeEth.address))
     surgeEthPriceRecorder.startRecording()
+
+    const surgeBtcPriceRecorder = new PriceRecorder(questDbClient, Contracts.SurgeBtc.address, () => getPriceInBnb(Contracts.SurgeBtc.address))
+    surgeBtcPriceRecorder.startRecording()
 })
 
 // configure and start rest api

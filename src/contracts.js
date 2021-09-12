@@ -14,6 +14,11 @@ export const Contracts = {
         address: "0x5B1d1BBDCc432213F83b15214B93Dc24D31855Ef",
         abi: import("./abi/SurgeETH.json"),
     },
+    SurgeBtc: {
+        name: 'sBTC',
+        address: "0xb68c9D9BD82BdF4EeEcB22CAa7F3Ab94393108a1",
+        abi: import("./abi/SurgeToken.json"),
+    },
 };
 
 /**

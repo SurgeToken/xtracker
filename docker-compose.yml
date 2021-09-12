@@ -13,14 +13,13 @@ services:
     restart: always
   price-recorder:
     build:
-      context: ../../Downloads/xtracker
+      context: .
       dockerfile: Dockerfile
     ports:
       - 127.0.0.1:3000:3000
     environment:
       QUESTDB_HOST: questdb
       BSC_RPC_ENDPOINT: ${BSC_RPC_ENDPOINT}
-      NOMICS_API_KEY: ${NOMICS_API_KEY}
     restart: always
     depends_on:
       - questdb
