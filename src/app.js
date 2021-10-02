@@ -37,6 +37,9 @@ startBnbPriceUpdateLoop().then(() => {
 
     const surgeBtcPriceRecorder = new PriceRecorder(questDbClient, Contracts.SurgeBtc.address, () => getPriceInBnb(Contracts.SurgeBtc.address))
     surgeBtcPriceRecorder.startRecording()
+
+    const surgeUselessPriceRecorder = new PriceRecorder(questDbClient, Contracts.SurgeUseless.address, () => getPriceInBnb(Contracts.SurgeUseless.address))
+    surgeUselessPriceRecorder.startRecording()
 })
 
 // configure and start rest api
