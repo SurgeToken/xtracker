@@ -42,6 +42,7 @@ startBnbPriceUpdateLoop().then(() => {
     surgeAdaPriceRecorder.startRecording()
 
     const surgeUselessPriceRecorder = new PriceRecorder(questDbClient, Contracts.SurgeUseless.address, () => getPriceInBnb(Contracts.SurgeUseless.address))
+    surgeUselessPriceRecorder.setPriceProcessor((price) => price * Math.pow(10, -9))
     surgeUselessPriceRecorder.startRecording()
 })
 

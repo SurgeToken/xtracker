@@ -21,8 +21,17 @@ export default class PriceRecorder {
         return !!this.interval
     }
 
+    setPriceProcessor(processorFn) {
+        this.priceProcessor = processorFn;
+    }
+
     async record() {
-        const surgeBnbPrice = await this.getSurgePriceFn()
+        let surgeBnbPrice = await this.getSurgePriceFn()
+
+        if (this.priceProcessor) {
+            surgeBnbPrice = this.priceProcessor(surgeBnbPrice)
+        }
+
         const bnbUsdPrice = getBnbPrice()
 
         await this.dbClient.insert(`${this.address} price=${surgeBnbPrice},bnbPrice=${bnbUsdPrice}`)
