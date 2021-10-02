@@ -6,6 +6,7 @@ import router from './routes/index.js'
 import QuestDbClient from './QuestDbClient.js'
 import {
     getPriceInBnb,
+    getSurgeUselessPriceInBnb,
     startBnbPriceUpdateLoop
 } from './price.js'
 import {Contracts} from "./contracts.js";
@@ -41,8 +42,7 @@ startBnbPriceUpdateLoop().then(() => {
     const surgeAdaPriceRecorder = new PriceRecorder(questDbClient, Contracts.SurgeAda.address, () => getPriceInBnb(Contracts.SurgeAda.address))
     surgeAdaPriceRecorder.startRecording()
 
-    const surgeUselessPriceRecorder = new PriceRecorder(questDbClient, Contracts.SurgeUseless.address, () => getPriceInBnb(Contracts.SurgeUseless.address))
-    surgeUselessPriceRecorder.setPriceProcessor((price) => price * Math.pow(10, -9))
+    const surgeUselessPriceRecorder = new PriceRecorder(questDbClient, Contracts.SurgeUseless.address, () => getSurgeUselessPriceInBnb(Contracts.SurgeUseless.address))
     surgeUselessPriceRecorder.startRecording()
 })
 

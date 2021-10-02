@@ -21,10 +21,6 @@ export default class PriceRecorder {
         return !!this.interval
     }
 
-    setPriceProcessor(processorFn) {
-        this.priceProcessor = processorFn;
-    }
-
     async record() {
         let surgeBnbPrice = await this.getSurgePriceFn()
 

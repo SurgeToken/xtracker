@@ -18,6 +18,17 @@ export async function getPriceInBnb(contractAddress) {
 }
 
 /**
+ * Get the current price of a a Surge Useless contract in BNB
+ * @param contractAddress The address of the contract to get the price from
+ * @returns {Promise<string>}
+ */
+ export async function getSurgeUselessPriceInBnb(contractAddress) {
+    const SurgeContract = new web3.eth.Contract(SURGE_CONTRACT_ABI, contractAddress)
+    const price = await SurgeContract.methods.calculatePrice().call()
+    return web3.utils.fromWei(String(price), "gwei")
+}
+
+/**
  * Get the current price of Surge in BNB
  * @returns The current price of Surge in BNB
  */
