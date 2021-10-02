@@ -26,7 +26,7 @@ export const Contracts = {
     },
     SurgeUseless: {
         name: 'sUSELESS',
-        address: "0x2e62e57d1d36517d4b0f329490ac1b78139967c0",
+        address: "0x2e62e57d1D36517D4b0F329490AC1b78139967C0",
         abi: import("./abi/SurgeToken.json"),
     }
 };
