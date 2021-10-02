@@ -38,6 +38,9 @@ startBnbPriceUpdateLoop().then(() => {
     const surgeBtcPriceRecorder = new PriceRecorder(questDbClient, Contracts.SurgeBtc.address, () => getPriceInBnb(Contracts.SurgeBtc.address))
     surgeBtcPriceRecorder.startRecording()
 
+    const surgeAdaPriceRecorder = new PriceRecorder(questDbClient, Contracts.SurgeAda.address, () => getPriceInBnb(Contracts.SurgeAda.address))
+    surgeAdaPriceRecorder.startRecording()
+
     const surgeUselessPriceRecorder = new PriceRecorder(questDbClient, Contracts.SurgeUseless.address, () => getPriceInBnb(Contracts.SurgeUseless.address))
     surgeUselessPriceRecorder.startRecording()
 })
