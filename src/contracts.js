@@ -28,7 +28,12 @@ export const Contracts = {
         name: 'sUSELESS',
         address: "0x2e62e57d1D36517D4b0F329490AC1b78139967C0",
         abi: import("./abi/SurgeToken.json"),
-    }
+    },
+    XUSD: {
+        name: 'XUSD',
+        address: "0x254246331cacbC0b2ea12bEF6632E4C6075f60e2",
+        abi: import("./abi/XUSD.json"),
+    },
 };
 
 /**
